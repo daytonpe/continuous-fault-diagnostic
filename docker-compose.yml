@@ -1,0 +1,10 @@
+version: '3'
+services:
+  timeseriesdb:
+    ports:
+      - 8086:8086
+    image: influxdb:1.7.9
+    environment:
+      INFLUXDB_DB: timeseriesdb
+      INFLUXDB_ADMIN_USER: admin
+      INFLUXDB_ADMIN_PASSWORD: password
