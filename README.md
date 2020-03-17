@@ -8,4 +8,5 @@ tar xvf iot.tar
 
 ### run the data generator
 
-cd iot; java -jar datagen-1.0-SNAPSHOT.jar -all
+cd iot; 
+java -jar datagen-1.0-SNAPSHOT.jar -all

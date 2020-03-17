@@ -1,5 +1,19 @@
 version: '3'
 services:
+  fault-diagnostics:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: bash -c "python3 src/index.py"
+    volumes:
+      - ./:/home/app
+    ports:
+      - 3000:3000
+    # depends_on:
+    #   - timeseriesdb
+    environment:
+      NODE_ENV: local
+
   timeseriesdb:
     ports:
       - 8086:8086
