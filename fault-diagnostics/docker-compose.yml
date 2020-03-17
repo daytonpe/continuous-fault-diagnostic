@@ -1,0 +1,16 @@
+version: '3'
+services:
+  fault-detector:
+    build: .
+    ports:
+      - '5000:5000'
+    # depends_on:
+    #   - timeseriesdb
+  timeseriesdb:
+    ports:
+      - 8086:8086
+    image: influxdb:1.7.9
+    environment:
+      INFLUXDB_DB: timeseriesdb
+      INFLUXDB_ADMIN_USER: admin
+      INFLUXDB_ADMIN_PASSWORD: password
