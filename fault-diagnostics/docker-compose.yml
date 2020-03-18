@@ -1,11 +1,5 @@
 version: '3'
 services:
-  fault-detector:
-    build: .
-    ports:
-      - '5000:5000'
-    # depends_on:
-    #   - timeseriesdb
   timeseriesdb:
     ports:
       - 8086:8086
