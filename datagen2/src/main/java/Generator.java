@@ -10,6 +10,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+
+// Start Pat Additions
+import org.influxdb.BatchOptions;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.BatchPoints;
+// import org.influxdb.dto.Point;
+
+// End Pat Additions
+
+
 
 public class Generator {
     private String db = "bearing";
@@ -26,6 +38,14 @@ public class Generator {
     private static String ATTR_GS = "gs";
     private static String ATTR_LOAD = "load";
     private static String ATTR_RATE = "rate";
+
+    // Start Pat Additions
+    private String host = "http://localhost:8086";
+    private String username = "admin";
+    private String password = "password";
+    private String tsdb = "timeseriesdb";
+    private InfluxDB influxDB;
+    // End Pat Additions
 
     private String[] filenames = new String[] {
         "mats" + File.separator + "baseline_1.mat",
@@ -85,6 +105,16 @@ public class Generator {
         }
     }
 
+    // Start Pat Additions
+    private void connect() {
+        influxDB = InfluxDBFactory.connect(host, username, password);
+        influxDB.setDatabase(tsdb);
+        influxDB.enableBatch(BatchOptions.DEFAULTS.actions(BW).exceptionHandler(
+                (failedPoints, throwable) -> throwable.printStackTrace())
+        );
+    }
+    // End Pat Additions
+
     private int selectFile() {
         double prob = random.nextDouble();
         int min, max;
@@ -110,7 +140,7 @@ public class Generator {
         }
 
         for (int i = start; i < end; i++ ) {
-            Point point = new Point().withMetric(metric)
+            model.Point point = new Point().withMetric(metric)
                                 .withTimestamp(timestamp++)
                                 .withLabel(getLabel(index))
                                 .withSr(((MLDouble)readers[index].getField(ATTR_SR)).getArray()[0][0])
@@ -130,6 +160,17 @@ public class Generator {
     }
 
     private void output(Point point) {
+        org.influxdb.dto.Point point1 = org.influxdb.dto.Point.measurement("gear_metrics")
+            .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+            .addField("metric", "fresh") 
+            .addField("label", 0.0)
+            .addField("sr", 97656.0) 
+            .addField("rate", 25.0)
+            .addField("gs", 0.8407559)
+            .addField("load", 270.0)
+            // .addField("timestamp", 69)
+            .build();
+        influxDB.write(point1);
         System.out.println(gson.toJson(point));
     }
 
@@ -181,6 +222,9 @@ public class Generator {
             e.printStackTrace();
             return;
         }
+
+        generator.connect();
+
 
         if (args.length > 0) {
             switch (args[0]) {
