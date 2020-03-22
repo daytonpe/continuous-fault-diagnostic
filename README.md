@@ -3,14 +3,14 @@
 ## Data Generator
 
 Run the following commands:
-`cd iot;`
-`java -jar datagen-1.0-SNAPSHOT.jar -all`
+`cd iot`
+`java -jar datagen-2.2-SNAPSHOT.jar -all`
 
-## Running InfluxDB
+## Running InfluxDB & Grafana
 
-Assuming you have Docker, Docker CLI, and docker-compose CLI installed you can simply run this command to start the TSDB on port 8086
+Assuming you have Docker, Docker CLI, and docker-compose CLI installed you can simply run this command to start the TSDB on port 8086 and the Grafana visualization service at localhost:3000
 
-`docker-compose up timeseriesdb`
+`docker-compose up`
 
 ## Fault Diagnostic Jupyter Notebook
 

@@ -153,6 +153,19 @@ public class Generator {
             else {
                 point.setLoad(String.valueOf(((MLDouble) readers[index].getField(ATTR_LOAD)).getArray()[0][0]));
             }
+            // Pat Change //
+            // write the points to the influxdb
+            org.influxdb.dto.Point point1 = org.influxdb.dto.Point.measurement("gear_metrics")
+                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .addField("metric", metric) 
+                .addField("label", getLabel(index))
+                .addField("sr", ((MLDouble)readers[index].getField(ATTR_SR)).getArray()[0][0]) 
+                .addField("rate", ((MLDouble)readers[index].getField(ATTR_RATE)).getArray()[0][0])
+                .addField("gs", ((MLDouble)readers[index].getField(ATTR_GS)).getArray()[i][0])
+                .addField("load", point.getLoad())
+                .build();
+            // End Pat Change //
+            influxDB.write(point1);
             output(point);
         }
 
@@ -160,17 +173,6 @@ public class Generator {
     }
 
     private void output(Point point) {
-        org.influxdb.dto.Point point1 = org.influxdb.dto.Point.measurement("gear_metrics")
-            .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-            .addField("metric", "fresh") 
-            .addField("label", 0.0)
-            .addField("sr", 97656.0) 
-            .addField("rate", 25.0)
-            .addField("gs", 0.8407559)
-            .addField("load", 270.0)
-            // .addField("timestamp", 69)
-            .build();
-        influxDB.write(point1);
         System.out.println(gson.toJson(point));
     }
 
