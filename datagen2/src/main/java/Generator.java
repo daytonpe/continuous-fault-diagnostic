@@ -163,7 +163,9 @@ public class Generator {
                 .addField("rate", ((MLDouble)readers[index].getField(ATTR_RATE)).getArray()[0][0])
                 .addField("gs", ((MLDouble)readers[index].getField(ATTR_GS)).getArray()[i][0])
                 .addField("load", point.getLoad())
+                .addField("ts", point.getTimestamp())
                 .build();
+            
             // End Pat Change //
             influxDB.write(point1);
             output(point);
