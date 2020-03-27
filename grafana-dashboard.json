@@ -20,9 +20,11 @@
   "panels": [
     {
       "aliasColors": {
-        "Label (Expected)": "dark-red"
+        "Label (Expected)": "dark-red",
+        "labeled_data.distinct": "light-yellow",
+        "labeled_data.mean": "super-light-yellow"
       },
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
@@ -37,25 +39,28 @@
       "hiddenSeries": false,
       "id": 12,
       "legend": {
+        "alignAsTable": false,
         "avg": false,
         "current": false,
+        "hideEmpty": false,
+        "hideZero": false,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
         "values": false
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
         "dataLinks": []
       },
       "percentage": false,
-      "pointradius": 2,
+      "pointradius": 4,
       "points": true,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [{}],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
@@ -76,6 +81,36 @@
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": ["label"],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "distinct"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "groupBy": [
+            {
+              "params": ["$__interval"],
+              "type": "time"
+            },
+            {
+              "params": ["null"],
+              "type": "fill"
+            }
+          ],
+          "measurement": "labeled_data",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
           "resultFormat": "time_series",
           "select": [
             [
@@ -116,8 +151,8 @@
           "format": "short",
           "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
+          "max": "2",
+          "min": "0",
           "show": true
         },
         {
@@ -517,5 +552,5 @@
   "variables": {
     "list": []
   },
-  "version": 6
+  "version": 3
 }

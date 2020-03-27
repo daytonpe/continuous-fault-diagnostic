@@ -5,6 +5,7 @@ import numpy as np
 from influxdb import InfluxDBClient
 import json
 import influxdb
+import time
 
 client = InfluxDBClient(host='localhost', port=8086,
                         username='admin', password='password')
@@ -13,9 +14,10 @@ client.switch_database('timeseriesdb')
 i = 0
 
 while (True):
+    code_timer = time.time()
     results = client.query(
-        'SELECT  sr, gs, load, ts FROM timeseriesdb.autogen.gear_metrics')
-    data = results.raw['series'][0]['values'][-100:]
+        'SELECT  sr, gs, load, ts FROM timeseriesdb.autogen.gear_metrics order by desc limit 10000')
+    data = results.raw['series'][0]['values']
     data = np.array(data)
     df = pd.DataFrame(data=data, columns=["TIME", "SR", "GR", "Load", 'ts'])
 
@@ -54,6 +56,7 @@ while (True):
             'labeled_data', 'classification', line[0], line[1]))
 
     client.write_points(data, database='timeseriesdb',
-                        time_precision='ms', batch_size=100, protocol='line')
+                        time_precision='s', batch_size=10000, protocol='line')
     i = i + 1
     print('iteration', i)
+    print('time: ', time.time() - code_timer)
