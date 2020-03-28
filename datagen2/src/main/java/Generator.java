@@ -119,7 +119,7 @@ public class Generator {
         double prob = random.nextDouble();
         int min, max;
 
-        if (prob < 0.7) {
+        if (prob < 0.3) {
             min = 0;
             max = 2;
         }

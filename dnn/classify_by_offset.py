@@ -31,7 +31,11 @@ def classify(offset):
         offset)
     print('query', query)
     results = client.query(query)
-    data = results.raw['series'][0]['values']
+    try:
+        data = results.raw['series'][0]['values']
+        pass
+    except KeyError:
+        return offset
 
     data = np.array(data)
     df = pd.DataFrame(data=data, columns=[
@@ -40,7 +44,7 @@ def classify(offset):
     timestamps = df['ts']
     new_offset = timestamps.max()
     print('new offset: ', new_offset)
-    print('points processing: ', new_offset - offset)
+    print('points processing: ', int(new_offset) - int(offset))
     labels = df['label']
 
     df = df.drop(['time'], axis=1)
@@ -84,7 +88,7 @@ def classify(offset):
             'labeled_data', 'classification', line[0], line[1], line[2]))
 
     client.write_points(data, database='timeseriesdb',
-                        time_precision='s', batch_size=20, protocol='line')
+                        time_precision='s', batch_size=100, protocol='line')
     print('time: ', time.time() - code_timer)
     print('iteration', i)
     return new_offset
@@ -101,4 +105,3 @@ while(True):
         new_offset = offset+100
         continue
     offset = new_offset
-    time.sleep(1)

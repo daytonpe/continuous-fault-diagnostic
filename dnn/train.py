@@ -2,27 +2,29 @@ import pandas as pd
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 
+# try to supress some of the tensorflow output
+tf.logging.set_verbosity(tf.logging.ERROR)
 
-gear_data = pd.read_csv("data/data.csv")
+gear_data = pd.read_csv("data/offline-train-XL.csv")
 print(gear_data.head())
 
-cols_to_norm = ['SR', 'GR', 'Load']
+cols_to_norm = ['sr', 'gs', 'load']
 
 gear_data[cols_to_norm] = gear_data[cols_to_norm].apply(
     lambda x: (x - x.min()) / (x.max() - x.min()))
 
-sr = tf.feature_column.numeric_column('SR')
-rate = tf.feature_column.numeric_column('Rate')
-gr = tf.feature_column.numeric_column('GR')
-load = tf.feature_column.numeric_column('Load')
+sr = tf.feature_column.numeric_column('sr')
+rate = tf.feature_column.numeric_column('rate')
+gr = tf.feature_column.numeric_column('gr')
+load = tf.feature_column.numeric_column('load')
 
 print(gear_data.head())
 
 feat_cols = [sr, gr, load]
 
-x_data = gear_data.drop(['Label', 'Metric', 'Timestamp', 'Rate'], axis=1)
+x_data = gear_data.drop(['label', 'rate'], axis=1)
 
-labels = gear_data['Label']
+labels = gear_data['label']
 
 x_train, x_test, y_train, y_test = train_test_split(
     x_data, labels, test_size=0.3, random_state=101)
