@@ -32,7 +32,7 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 0
       },
@@ -77,7 +77,7 @@
               "type": "fill"
             }
           ],
-          "measurement": "gear_metrics",
+          "measurement": "labeled_data",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -115,7 +115,7 @@
           "select": [
             [
               {
-                "params": ["label"],
+                "params": ["prediction"],
                 "type": "field"
               },
               {
@@ -181,7 +181,7 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 8
       },
@@ -383,8 +383,8 @@
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
-        "w": 12,
+        "h": 7,
+        "w": 24,
         "x": 0,
         "y": 16
       },
