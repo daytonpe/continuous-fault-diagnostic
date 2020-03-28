@@ -37,7 +37,7 @@ data = np.array(data)
 #     "time", "sr", "gs", "load", 'rate' 'ts', 'label'])
 
 with open('data/offline-train-XXL.csv', 'w') as fcsv:
-    fcsv.write("sr, gs, load, rate, ts, label\n")
+    fcsv.write("sr,gs,load,rate,ts,label\n")
     for line in data:
         fcsv.write(str(line[1]) + "," + str(line[2]) + "," + str(
             line[3]) + "," + str(line[4]) + "," + str(line[5]) + "," + str(line[6])+"\n")
