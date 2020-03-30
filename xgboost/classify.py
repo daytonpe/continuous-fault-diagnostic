@@ -60,11 +60,6 @@ def classify(offset):
         data.append("{},metric={} timestamp={},prediction={},label={}".format(
             'labeled_data', 'classification', str(timestamps[j]), str(predictions[j]), str(labels[j])))
 
-    with open('data/test_compare.csv', 'w') as fcsv:
-        fcsv.write("sr,gs,load,rate,ts,label\n")
-        for line in data:
-            fcsv.write(line+"\n")
-
     client.write_points(data, database='timeseriesdb',
                         time_precision='s', batch_size=100, protocol='line')
     print('time: ', time.time() - code_timer)
