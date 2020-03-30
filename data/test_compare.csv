@@ -1,0 +1,14 @@
+sr,gs,load,rate,ts,label
+labeled_data,metric=classification timestamp=23163,prediction=0,label=1
+labeled_data,metric=classification timestamp=23164,prediction=0,label=1
+labeled_data,metric=classification timestamp=23165,prediction=0,label=1
+labeled_data,metric=classification timestamp=23166,prediction=0,label=1
+labeled_data,metric=classification timestamp=23167,prediction=0,label=1
+labeled_data,metric=classification timestamp=23168,prediction=0,label=1
+labeled_data,metric=classification timestamp=23169,prediction=0,label=1
+labeled_data,metric=classification timestamp=23170,prediction=0,label=1
+labeled_data,metric=classification timestamp=23171,prediction=0,label=1
+labeled_data,metric=classification timestamp=23172,prediction=0,label=1
+labeled_data,metric=classification timestamp=23173,prediction=0,label=1
+labeled_data,metric=classification timestamp=23174,prediction=0,label=1
+labeled_data,metric=classification timestamp=23175,prediction=0,label=1
