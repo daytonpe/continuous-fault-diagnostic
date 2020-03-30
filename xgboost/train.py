@@ -12,7 +12,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     X.to_numpy(), y.to_numpy().flatten(), test_size=0.3, random_state=101)
 print(X_test)
 
-xgboost_model = xgb.XGBClassifier(max_depth=10)
+xgboost_model = xgb.XGBClassifier(max_depth=10, eta=.1)
 
 xgboost_model.fit(X_train, y_train,
                   eval_set=[(X_train, y_train), (X_test, y_test)],

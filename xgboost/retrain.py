@@ -5,6 +5,7 @@ import pickle
 from sklearn.model_selection import train_test_split
 from influxdb import InfluxDBClient
 import os
+import time
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
@@ -46,7 +47,7 @@ def retrain():
         X, y.flatten(), test_size=0.3, random_state=101)
 
     # retrain the classifier
-    xgboost_model = xgb.XGBClassifier(max_depth=10)
+    xgboost_model = xgb.XGBClassifier(max_depth=10, eta=.1)
     xgboost_model.fit(X_train, y_train,
                       eval_set=[(X_train, y_train), (X_test, y_test)],
                       eval_metric='merror')
@@ -55,11 +56,17 @@ def retrain():
     pickle.dump(xgboost_model, open("xgboost/model/pima.pickle.dat", "wb"))
 
     # send out an event to mark when a new data model is created
-    data = ["{},metric={}".format(
-        'labeled_data', 'retrain')]
+    data = ["{},metric={} flag={}".format(
+        'labeled_data', 'retrain', '1')]
 
     client.write_points(data, database='timeseriesdb',
                         time_precision='s', batch_size=1, protocol='line')
 
 
-retrain()
+while (True):
+    try:
+        retrain()
+    except:
+        print('unexpected error. Sleeping for 5 seconds then retrying...')
+        time.sleep(5)
+        pass

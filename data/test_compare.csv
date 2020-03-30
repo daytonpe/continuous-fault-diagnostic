@@ -1,16 +1,9 @@
 sr,gs,load,rate,ts,label
-labeled_data,metric=classification timestamp=320441,prediction=1,label=1
-labeled_data,metric=classification timestamp=320442,prediction=0,label=1
-labeled_data,metric=classification timestamp=320443,prediction=1,label=1
-labeled_data,metric=classification timestamp=320444,prediction=0,label=1
-labeled_data,metric=classification timestamp=320445,prediction=0,label=1
-labeled_data,metric=classification timestamp=320446,prediction=0,label=1
-labeled_data,metric=classification timestamp=320447,prediction=0,label=1
-labeled_data,metric=classification timestamp=320448,prediction=1,label=1
-labeled_data,metric=classification timestamp=320449,prediction=0,label=1
-labeled_data,metric=classification timestamp=320450,prediction=0,label=1
-labeled_data,metric=classification timestamp=320451,prediction=0,label=1
-labeled_data,metric=classification timestamp=320452,prediction=0,label=1
-labeled_data,metric=classification timestamp=320453,prediction=0,label=1
-labeled_data,metric=classification timestamp=320454,prediction=0,label=1
-labeled_data,metric=classification timestamp=320455,prediction=0,label=1
+labeled_data,metric=classification timestamp=371712,prediction=0,label=0
+labeled_data,metric=classification timestamp=371713,prediction=0,label=0
+labeled_data,metric=classification timestamp=371714,prediction=0,label=0
+labeled_data,metric=classification timestamp=371715,prediction=0,label=0
+labeled_data,metric=classification timestamp=371716,prediction=0,label=0
+labeled_data,metric=classification timestamp=371717,prediction=0,label=0
+labeled_data,metric=classification timestamp=371718,prediction=0,label=0
+labeled_data,metric=classification timestamp=371719,prediction=0,label=0
