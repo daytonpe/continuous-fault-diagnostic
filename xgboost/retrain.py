@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from influxdb import InfluxDBClient
 import os
 import time
+import split_data as sd
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
@@ -41,6 +42,13 @@ def retrain():
     # on which to train
     X = np.concatenate((X_offline, X_online), axis=0)
     y = np.concatenate((y_offline, y_online), axis=0)
+
+    # split data into data window
+    DW = 10
+    X = sd.split_data(DW, X)
+    X = np.asarray(X, dtype=np.float32)
+    y = sd.split_labels(DW, y)
+    y = np.asarray(y, dtype=np.int)
 
     # split into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(
