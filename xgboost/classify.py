@@ -47,7 +47,6 @@ def classify(offset, DW):
     # x = x.astype(str).astype(float).to_numpy()  # convert to numpy of floats
 
     # split data into data window
-    DW = 10
     X = sd.split_data(DW, X)
     X = np.asarray(X, dtype=np.float32)
 
@@ -70,16 +69,20 @@ def classify(offset, DW):
     return new_offset
 
 
-DW = 10
+DW = 50
 offset = 0
 while(True):
     i = i + 1
     print('iteration', i)
     try:
-        new_offset = classify(offset, 10)
+        new_offset = classify(offset, DW)
         pass
     except ValueError as identifier:
         print('Value Error caught, skipping iteration ', i)
+        time.sleep(1)
         new_offset = offset + 100
         continue
     offset = new_offset
+    # sleep for 1 second to minimize ValueErrors by letting some
+    # data be produced. Should help for larger DW
+    time.sleep(1)

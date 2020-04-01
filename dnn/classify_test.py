@@ -36,7 +36,7 @@ data = np.array(data)
 # df = pd.DataFrame(data=data, columns=[
 #     "time", "sr", "gs", "load", 'rate' 'ts', 'label'])
 
-with open('data/offline-train-XXL.csv', 'w') as fcsv:
+with open('data/online-train-XXL.csv', 'w') as fcsv:
     fcsv.write("sr,gs,load,rate,ts,label\n")
     for line in data:
         fcsv.write(str(line[1]) + "," + str(line[2]) + "," + str(

@@ -16,15 +16,7 @@ client = InfluxDBClient(host='localhost', port=8086,
 client.switch_database('timeseriesdb')
 
 
-def retrain():
-    # get the gear_data from the offline generated data
-    # right now it's a csv but we could just
-    # as easily read it from the offline TDSB
-    gear_data_offline = pd.read_csv('data/offline-train-XXL.csv')
-    gear_data_offline = gear_data_offline.drop('rate', axis=1)
-    X_offline = gear_data_offline[['sr', 'gs', 'load']]
-    y_offline = gear_data_offline[['label']]
-
+def retrain(DW, include_offline_data):
     # get the gear_data from the online generated data
     # we found rate to be useless so leave it out
     results = client.query(
@@ -35,16 +27,24 @@ def retrain():
     gear_data_online = pd.DataFrame(data=gear_data_online, columns=[
         "datetime", "sr", "gs", "load", 'ts', 'label'])
 
-    X_online = gear_data_online[['sr', 'gs', 'load']].astype(str).astype(float)
-    y_online = gear_data_online[['label']].astype(str).astype(int)
+    X = gear_data_online[['sr', 'gs', 'load']].astype(str).astype(float)
+    y = gear_data_online[['label']].astype(str).astype(int)
 
-    # add the two sets of data together in order to create a full set
-    # on which to train
-    X = np.concatenate((X_offline, X_online), axis=0)
-    y = np.concatenate((y_offline, y_online), axis=0)
+    if include_offline_data:
+        # get the gear_data from the offline generated data
+        # right now it's a csv but we could just
+        # as easily read it from the offline TDSB
+        gear_data_offline = pd.read_csv('data/offline-train-XXL.csv')
+        gear_data_offline = gear_data_offline.drop('rate', axis=1)
+        X_offline = gear_data_offline[['sr', 'gs', 'load']]
+        y_offline = gear_data_offline[['label']]
+
+        # add the two sets of data together in order to create a full set
+        # on which to train
+        X = np.concatenate((X_offline, X), axis=0)
+        y = np.concatenate((y_offline, y), axis=0)
 
     # split data into data window
-    DW = 10
     X = sd.split_data(DW, X)
     X = np.asarray(X, dtype=np.float32)
     y = sd.split_labels(DW, y)
@@ -71,9 +71,11 @@ def retrain():
                         time_precision='s', batch_size=1, protocol='line')
 
 
+DW = 50
+include_offline_data = False
 while (True):
     try:
-        retrain()
+        retrain(DW, include_offline_data)
     except:
         print('unexpected error. Sleeping for 5 seconds then retrying...')
         time.sleep(5)

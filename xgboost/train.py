@@ -11,7 +11,7 @@ X = gear_data[['sr', 'gs', 'load']].to_numpy()
 y = gear_data[['label']].to_numpy()
 
 # split data into data window
-DW = 10
+DW = 50
 X = sd.split_data(DW, X)
 X = np.asarray(X, dtype=np.float32)
 y = sd.split_labels(DW, y)
