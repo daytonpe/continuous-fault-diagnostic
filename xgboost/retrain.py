@@ -7,6 +7,9 @@ from influxdb import InfluxDBClient
 import os
 import time
 import split_data as sd
+import arg_inputs
+
+args = arg_inputs.get_input_args()
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
@@ -34,7 +37,7 @@ def retrain(DW, include_offline_data):
         # get the gear_data from the offline generated data
         # right now it's a csv but we could just
         # as easily read it from the offline TDSB
-        gear_data_offline = pd.read_csv('data/offline-train-XXL.csv')
+        gear_data_offline = pd.read_csv(args.offline_data)
         gear_data_offline = gear_data_offline.drop('rate', axis=1)
         X_offline = gear_data_offline[['sr', 'gs', 'load']]
         y_offline = gear_data_offline[['label']]
@@ -61,7 +64,7 @@ def retrain(DW, include_offline_data):
                       eval_metric='merror')
 
     # overwrite the original model
-    pickle.dump(xgboost_model, open("xgboost/model/pima.pickle.dat", "wb"))
+    pickle.dump(xgboost_model, open(args.model, "wb"))
 
     # send out an event to mark when a new data model is created
     data = ["{},metric={} flag={}".format(
@@ -71,8 +74,8 @@ def retrain(DW, include_offline_data):
                         time_precision='s', batch_size=1, protocol='line')
 
 
-DW = 50
-include_offline_data = False
+DW = args.dw
+include_offline_data = args.include_offline_data
 while (True):
     try:
         retrain(DW, include_offline_data)

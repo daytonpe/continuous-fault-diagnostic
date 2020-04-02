@@ -5,6 +5,7 @@ import numpy as np
 from influxdb import InfluxDBClient
 import datetime
 import time
+import arg_inputs
 
 # connect to the TSDB
 client = InfluxDBClient(host='localhost', port=8086,
@@ -47,9 +48,10 @@ def calc_accuracy(mins):
     print(accuracy)
 
 
+args = arg_inputs.get_input_args()
 while(True):
     try:
-        calc_accuracy(15)
+        calc_accuracy(args.mins)
         time.sleep(5)
         pass
     except ValueError as identifier:

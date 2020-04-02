@@ -4,14 +4,17 @@ import numpy as np
 import pickle
 import split_data as sd
 from sklearn.model_selection import train_test_split
+import arg_inputs
 
-gear_data = pd.read_csv('data/offline-train-XXL.csv')
+args = arg_inputs.get_input_args()
+
+gear_data = pd.read_csv(args.offline_data)
 gear_data = gear_data.drop('rate', axis=1)
 X = gear_data[['sr', 'gs', 'load']].to_numpy()
 y = gear_data[['label']].to_numpy()
 
 # split data into data window
-DW = 50
+DW = args.dw
 X = sd.split_data(DW, X)
 X = np.asarray(X, dtype=np.float32)
 y = sd.split_labels(DW, y)
@@ -26,4 +29,4 @@ xgboost_model.fit(X_train, y_train,
                   eval_set=[(X_train, y_train), (X_test, y_test)],
                   eval_metric='merror')
 
-pickle.dump(xgboost_model, open("xgboost/model/pima.pickle.dat", "wb"))
+pickle.dump(xgboost_model, open(args.model, "wb"))

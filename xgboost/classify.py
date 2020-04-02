@@ -8,7 +8,9 @@ import time
 import datetime
 import pickle
 import split_data as sd
+import arg_inputs
 
+args = arg_inputs.get_input_args()
 
 client = InfluxDBClient(host='localhost', port=8086,
                         username='admin', password='password')
@@ -31,6 +33,7 @@ def classify(offset, DW):
         data = results.raw['series'][0]['values']
         pass
     except KeyError:
+        print('Key Error caught, no values found for this offset. Skipping iteration.')
         return offset
 
     data = np.array(data)
@@ -50,15 +53,11 @@ def classify(offset, DW):
     X = sd.split_data(DW, X)
     X = np.asarray(X, dtype=np.float32)
 
-    model = pickle.load(open("xgboost/model/pima.pickle.dat", "rb"))
-
+    model = pickle.load(open(args.model, "rb"))
     predictions = model.predict(X)  # convert to numpy of floats
-
-    print(len(predictions))
 
     data = []
     for j in range(len(predictions)):
-        # json_line = json.loads(line)
         # Form: 'gear_metrics,metric=offline label=0,sr=97656.0,rate=25.0,gs=0.8407559,load=270.0,timestamp=0'
         data.append("{},metric={} timestamp={},prediction={},label={}".format(
             'labeled_data', 'classification', str(timestamps[j]), str(predictions[j]), str(labels[j])))
@@ -69,13 +68,12 @@ def classify(offset, DW):
     return new_offset
 
 
-DW = 50
 offset = 0
 while(True):
     i = i + 1
-    print('iteration', i)
+    print('\nIteration', i)
     try:
-        new_offset = classify(offset, DW)
+        new_offset = classify(offset, args.dw)
         pass
     except ValueError as identifier:
         print('Value Error caught, skipping iteration ', i)
