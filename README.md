@@ -5,6 +5,11 @@
 - Create a system to continuously read in new data and update the model -- online training
 - Display the data, accuracy, and other metrics with Grafana
 
+## Demo
+
+To see a video demonstration of the system in action visit the following YouTube link:
+[Gear Fault Analysis with InfluxDB and XGBoost](https://www.youtube.com/watch?v=ANAbMNPWRVA)
+
 ## Getting Started
 
 First ensure you have the requirements listed in the `xgboost/requirements.txt` file.
