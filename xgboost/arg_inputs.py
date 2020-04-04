@@ -4,18 +4,7 @@ import argparse
 def get_input_args():
     """
     Retrieves and parses the command line arguments created and defined using
-    the argparse module. This function returns these arguments as an
-    ArgumentParser object.
-     3 command line arguements are created:
-       dir - Path to the pet image files(default- 'pet_images/')
-       arch - CNN model architecture to use for image classification(default-
-              pick any of the following vgg, alexnet, resnet)
-       dogfile - Text file that contains all labels associated to dogs(default-
-                'dognames.txt'
-    Parameters:
-     None - simply using argparse module to create & store command line arguments
-    Returns:
-     parse_args() -data structure that stores the command line arguments object
+    the argparse module.
     """
 
     parser = argparse.ArgumentParser()

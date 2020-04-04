@@ -14,9 +14,12 @@ client.switch_database('timeseriesdb')
 i = 0
 
 
-# Get the accuracy over the last 15 minutes
-
 def calc_accuracy(mins):
+    """
+    mins - minutes of rolling accuracy to be calculated
+
+    calculate the accuracy for the last X number of minutes and write that to InfluxDB
+    """
     results = {}
     data = []
     predictions = []

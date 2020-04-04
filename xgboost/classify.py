@@ -18,9 +18,14 @@ client.switch_database('timeseriesdb')
 i = 0
 
 
-# pass in the offset from the last run
-
 def classify(offset, DW):
+    '''
+    offset - integer timestamp from the data generator from which we are to classify
+    DW - Data Window size for which we are classifying. I.e. how many readings to classify into a single label
+
+    Classifies the data since the offset timestamp and writes the data to the labeled_data section
+    of InfluxDB.
+    '''
     code_timer = time.time()
     results = {}
     data = []

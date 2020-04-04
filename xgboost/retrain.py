@@ -20,6 +20,12 @@ client.switch_database('timeseriesdb')
 
 
 def retrain(DW, include_offline_data):
+    '''
+    DW - Data Window size for which we are training. I.e. how many readings to take as a single input to the model
+    include_offline_data - should we train using the offline data or just using data that has come in since turning on the classifier
+
+    retrain the model and overwrite the model currently in use.
+    '''
     # get the gear_data from the online generated data
     # we found rate to be useless so leave it out
     results = client.query(
