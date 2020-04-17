@@ -13,6 +13,9 @@ gear_data = gear_data.drop('rate', axis=1)
 X = gear_data[['sr', 'gs', 'load']].to_numpy()
 y = gear_data[['label']].to_numpy()
 
+print('X', X)
+print('y', y)
+
 # split data into data window
 DW = args.dw
 X = sd.split_data(DW, X)

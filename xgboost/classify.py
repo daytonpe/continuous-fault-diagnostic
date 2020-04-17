@@ -88,4 +88,4 @@ while(True):
     offset = new_offset
     # sleep for 1 second to minimize ValueErrors by letting some
     # data be produced. Should help for larger DW
-    time.sleep(1)
+    time.sleep(2)

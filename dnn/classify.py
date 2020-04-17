@@ -14,34 +14,32 @@ client.switch_database('timeseriesdb')
 i = 0
 
 
-def classify(mins, i):
+def classify(offset, DW):
     results = {}
     data = []
     df = 0
     predictions = []
 
     code_timer = time.time()
-    query = "SELECT  sr, gs, load, ts, label FROM timeseriesdb.autogen.gear_metrics where time > '{}'".format(
-        datetime.datetime.utcnow() - datetime.timedelta(minutes=mins))
+    query = "SELECT  sr, gs, load, ts, label FROM timeseriesdb.autogen.gear_metrics where ts > {}".format(
+        offset)
     results = client.query(query)
-    data = results.raw['series'][0]['values']
-    # try:
-    #     pass
-    # except KeyError as identifier:
-    #     print('Database not found. Sleeping 5 ', i)
-    #     time.sleep(5)
-    #     i += 1
-    #     continue
+    try:
+        data = results.raw['series'][0]['values']
+        pass
+    except KeyError:
+        print('Key Error caught, no values found for this offset. Skipping iteration.')
+        return offset
+
     data = np.array(data)
     df = pd.DataFrame(data=data, columns=[
         "time", "sr", "gs", "load", 'ts', 'label'])
 
-    timestamps = df['ts']
-    labels = df['label']
-
-    df = df.drop(['time'], axis=1)
-    df = df.drop(['ts'], axis=1)
-    df = df.drop(['label'], axis=1)
+    timestamps = df['ts'].astype(str).astype(int).to_numpy()
+    new_offset = timestamps.max()
+    print('new offset: ', new_offset)
+    print('points processing: ', int(new_offset) - int(offset))
+    labels = df['label'].astype(str).astype(int).to_numpy()
 
     # since we can't get real mins and maxes on the
     # fly we will hardcode these values for normalization
@@ -54,14 +52,8 @@ def classify(mins, i):
 
     # print(df.head())
 
-    # df = df['SR', 'GR', 'Load']
+    df = df['sr', 'gs', 'load']
     df = df.astype(str).astype(float)
-    # try:
-    #     pass
-    # except ValueError as identifier:
-    #     print('Value Error caught, skipping iteration ', i)
-    #     i += 1
-    #     continue
 
     df['sr'] = df['sr'].apply(
         lambda x: (x - sr_min) / (sr_max - sr_min))
@@ -71,6 +63,8 @@ def classify(mins, i):
 
     df['load'] = df['load'].apply(
         lambda x: (x - load_min) / (load_max - load_min))
+
+    df = df.drop(['label', 'rate', 'ts'], axis=1).to_numpy()
 
     new_model = tf.keras.models.load_model('dnn/models/trained_model.h5')
 
